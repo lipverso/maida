@@ -1,9 +1,10 @@
 package com.maida.demo.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,8 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.maida.demo.model.User;
 import com.maida.demo.repository.UserRepository;
 import com.maida.demo.service.UserService;
-
-import lombok.experimental.var;
 
 @RestController
 @RequestMapping("/users")
@@ -37,5 +36,10 @@ public class UserController {
 	@GetMapping("/{id}")
 	public User listar(@PathVariable Long id) {
 		return userRepository.findById(id).orElseThrow();
+	}
+	
+	@GetMapping
+	public List<User> listarTodos() {
+		return userRepository.findAll();
 	}
 }

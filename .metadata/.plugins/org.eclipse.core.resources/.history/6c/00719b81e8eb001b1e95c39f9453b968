@@ -1,0 +1,5 @@
+package com.maida.demo.controller;
+
+public class AccountController {
+
+}

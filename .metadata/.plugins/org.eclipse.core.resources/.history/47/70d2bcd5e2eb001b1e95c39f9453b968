@@ -1,0 +1,9 @@
+CREATE TABLE user (
+	id BIGINT(20) PRIMARY KEY AUTO_INCREMENT,
+	name VARCHAR(50) NOT NULL UNIQUE,
+	password VARCHAR(50) NOT NULL,
+	email VARCHAR(50) NOT NULL
+	
+) ENGINE = InnoDB DEFAULT CHARSET = utf8;
+
+INSERT INTO user (name, password, email) VALUES ('John Doe', '123987' 'john@email.com');

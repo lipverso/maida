@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
@@ -21,21 +23,17 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	@Autowired
 	private AuthenticationManager authenticationManager;
 	
+	@Autowired
+	private UserDetailsService userDetailsService;
+	
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
 		clients.inMemory()
-			// Determines client`s login, password and scope
-			.withClient("angular")
-			.secret("@ngul@r0")
+			.withClient("maida")
+			.secret("$2a$10$G1j5Rf8aEEiGc/AET9BA..xRR.qCpOUzBZoJd8ygbGy6tb3jsMT9G")
 			.scopes("read", "write")
-			
-			//Grant Type for password credential OAuth and refresh token
 			.authorizedGrantTypes("password", "refresh_token")
-			
-			//accessTokenValidty - How many seconds the token will be valid for
-			.accessTokenValiditySeconds(60)
-			
-			//Validity of refresh token in seconds (24 hours, in this case)
+			.accessTokenValiditySeconds(1800)
 			.refreshTokenValiditySeconds(3600*24);
 	}
 	
@@ -44,25 +42,15 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 		endpoints
 			.tokenStore(tokenStore())
 			.accessTokenConverter(accessTokenConverter())
-			
-			/* reuseRefreshTokens set to false: everytime I request 
-			 * a new access token, a new access token will be sent
-			 * to the user. So, if the refreshToken doesn`t expire, 
-			 * the user will always be able to get new access tokens to access
-			 * the API */
-			/* Now, when sending a test request through postman, it won't be necessary
-			 * to send user's username and password on body request.
-			 * We simply use the refresh token, sending grant_type "refresh_token"
-			 * and the token itself on the body request.
-			 */
 			.reuseRefreshTokens(false)
+			.userDetailsService(this.userDetailsService)
 			.authenticationManager(authenticationManager);
 	}
-	
+
 	@Bean
 	public JwtAccessTokenConverter accessTokenConverter() {
 		JwtAccessTokenConverter accessTokenConverter = new JwtAccessTokenConverter();
-		accessTokenConverter.setSigningKey("algaworksTeste1234");
+		accessTokenConverter.setSigningKey("88CB851F47F64DE11ED656D75B6FA9A72FA8787A45A7FBA4783D3F5D59326DA875EB174BFA12C53D4762768");
 		return accessTokenConverter;
 	}
 	@Bean
