@@ -1,0 +1,5 @@
+package com.maida.repository;
+
+public class UserRepository {
+
+}

@@ -1,0 +1,27 @@
+package com.maida.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
+import com.maida.model.User;
+import com.maida.repository.UserRepository;
+
+@Service
+public class UserService {
+	
+	@Autowired
+	private UserRepository userRepository;
+
+	public ResponseEntity<User> validate(User user) {
+		var savedUser = userRepository.findById(user.getId());
+		
+		if (savedUser.isEmpty()) {
+			userRepository.save(user);
+		}
+		
+		return savedUser.isEmpty() ? ResponseEntity.status(HttpStatus.CREATED).body(user) : ResponseEntity.unprocessableEntity().build();
+	}
+
+}

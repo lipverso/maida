@@ -1,0 +1,5 @@
+package com.maida.model;
+
+public class User {
+
+}

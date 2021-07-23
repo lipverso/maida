@@ -1,0 +1,74 @@
+package com.example.demo.config;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
+import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
+import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
+import org.springframework.security.oauth2.provider.token.AccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
+import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+
+@Configuration
+@EnableAuthorizationServer
+public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
+	
+	@Autowired
+	private AuthenticationManager authenticationManager;
+	
+	@Override
+	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
+		clients.inMemory()
+			// Determines client`s login, password and scope
+			.withClient("angular")
+			.secret("@ngul@r0")
+			.scopes("read", "write")
+			
+			//Grant Type for password credential OAuth and refresh token
+			.authorizedGrantTypes("password", "refresh_token")
+			
+			//accessTokenValidty - How many seconds the token will be valid for
+			.accessTokenValiditySeconds(60)
+			
+			//Validity of refresh token in seconds (24 hours, in this case)
+			.refreshTokenValiditySeconds(3600*24);
+	}
+	
+	@Override
+	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+		endpoints
+			.tokenStore(tokenStore())
+			.accessTokenConverter(accessTokenConverter())
+			
+			/* reuseRefreshTokens set to false: everytime I request 
+			 * a new access token, a new access token will be sent
+			 * to the user. So, if the refreshToken doesn`t expire, 
+			 * the user will always be able to get new access tokens to access
+			 * the API */
+			/* Now, when sending a test request through postman, it won't be necessary
+			 * to send user's username and password on body request.
+			 * We simply use the refresh token, sending grant_type "refresh_token"
+			 * and the token itself on the body request.
+			 */
+			.reuseRefreshTokens(false)
+			.authenticationManager(authenticationManager);
+	}
+	
+	@Bean
+	public JwtAccessTokenConverter accessTokenConverter() {
+		JwtAccessTokenConverter accessTokenConverter = new JwtAccessTokenConverter();
+		accessTokenConverter.setSigningKey("algaworksTeste1234");
+		return accessTokenConverter;
+	}
+	@Bean
+	public TokenStore tokenStore() {
+		return new JwtTokenStore(accessTokenConverter());
+	}
+	
+
+}
