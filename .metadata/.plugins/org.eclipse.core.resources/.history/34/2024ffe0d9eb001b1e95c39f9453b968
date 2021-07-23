@@ -3,12 +3,9 @@ package com.maida.demo.model;
 import java.util.List;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -30,8 +27,7 @@ public class User {
 	@JsonProperty(access = Access.WRITE_ONLY)
 	private String password;
 	
-	@OneToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "user_account", joinColumns = @JoinColumn(name = "id_user"), inverseJoinColumns = @JoinColumn(name = "id_account"))
+	@OneToMany
 	private List<Account> accounts;
 
 	public Long getId() {
