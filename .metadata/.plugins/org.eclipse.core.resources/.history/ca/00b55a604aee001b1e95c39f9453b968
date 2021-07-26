@@ -1,0 +1,5 @@
+package com.maida.demo.dto;
+
+public class AccountDTO {
+
+}

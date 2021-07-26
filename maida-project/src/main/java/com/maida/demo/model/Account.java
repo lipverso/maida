@@ -2,10 +2,13 @@ package com.maida.demo.model;
 
 import java.math.BigDecimal;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -16,9 +19,13 @@ public class Account {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	private Integer number;
+	private String number;
 	
 	private BigDecimal balance;
+	
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "id_user", nullable=false)
+	private User user;
 
 	public Long getId() {
 		return id;
@@ -28,11 +35,11 @@ public class Account {
 		this.id = id;
 	}
 
-	public Integer getNumber() {
+	public String getNumber() {
 		return number;
 	}
 
-	public void setNumber(Integer number) {
+	public void setNumber(String number) {
 		this.number = number;
 	}
 
@@ -43,4 +50,13 @@ public class Account {
 	public void setBalance(BigDecimal balance) {
 		this.balance = balance;
 	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+	
 }

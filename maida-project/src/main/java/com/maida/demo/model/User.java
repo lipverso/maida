@@ -2,6 +2,8 @@ package com.maida.demo.model;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -12,6 +14,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
@@ -21,6 +24,7 @@ public class User {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private Long id;
 	
 	private String name;
@@ -32,10 +36,10 @@ public class User {
 	
 	private String token;
 	
-	@OneToMany(fetch = FetchType.EAGER)
+	@OneToMany
 	@JoinTable(name = "user_account", joinColumns = @JoinColumn(name = "id_user"), inverseJoinColumns = @JoinColumn(name = "id_account"))
+	@JsonIgnore
 	private List<Account> accounts;
-	
 
 	public List<Account> getAccounts() {
 		return accounts;

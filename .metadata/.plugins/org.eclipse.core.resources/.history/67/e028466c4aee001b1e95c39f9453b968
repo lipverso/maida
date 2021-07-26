@@ -1,0 +1,10 @@
+package com.maida.demo.dto;
+
+import java.math.BigDecimal;
+
+public class AccountDTO {
+	
+	private String number;
+	private BigDecimal balance;
+
+}

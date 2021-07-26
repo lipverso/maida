@@ -1,0 +1,33 @@
+package com.maida.demo.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.maida.demo.exception.UnauthorizedAccessException;
+import com.maida.demo.model.Account;
+import com.maida.demo.repository.AccountRepository;
+import com.maida.demo.repository.UserRepository;
+
+@Service
+public class AccountService {
+
+	@Autowired
+	private UserRepository userRepository;
+	
+	@Autowired
+	private AccountRepository accountRepository;
+	
+	public Account register(Account account, String token) {
+		var user = userRepository.findByToken(token).orElse(null);
+		
+		if (user != null) {
+			account.setUser(user);
+		} else {
+			throw new UnauthorizedAccessException();
+		}
+			
+		return account;
+
+	}
+
+}

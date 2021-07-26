@@ -1,0 +1,18 @@
+package com.maida.demo.dto;
+
+public class UserDTO {
+
+	private String email;
+	
+	private String name;
+
+	public String getEmail() {
+		return email;
+	}
+
+	public String getName() {
+		return name;
+	}
+	
+	
+}

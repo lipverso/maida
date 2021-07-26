@@ -6,3 +6,5 @@
 1627324283028	Rename type 'UserService'
 1627326515016	Delete element
 1627326525419	Delete element
+1627331725865	Extract method 'findAccountNumber'
+1627332503329	Delete elements
