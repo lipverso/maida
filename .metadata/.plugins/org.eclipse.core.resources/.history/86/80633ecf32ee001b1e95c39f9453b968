@@ -1,0 +1,5 @@
+package com.maida.demo.service;
+
+public class AuthenticationService {
+
+}

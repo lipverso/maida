@@ -1,0 +1,12 @@
+package com.maida.demo.dto;
+
+public class AuthenticateDTO {
+	
+	private String type;
+	private String email;
+	private String name;
+	private String token;
+	
+	public Us
+
+}

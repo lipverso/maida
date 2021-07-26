@@ -30,6 +30,8 @@ public class User {
 	@JsonProperty(access = Access.WRITE_ONLY)
 	private String password;
 	
+	private String token;
+	
 	@OneToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "user_account", joinColumns = @JoinColumn(name = "id_user"), inverseJoinColumns = @JoinColumn(name = "id_account"))
 	private List<Account> accounts;
@@ -73,6 +75,14 @@ public class User {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
 	}
 
 	@Override
