@@ -1,0 +1,9 @@
+package com.maida.demo.dto;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public class TransferDTO {
+	
+	@JsonProperty("source_account_number")
+	private String sourceAccountNumber
+}

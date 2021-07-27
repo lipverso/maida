@@ -1,18 +1,13 @@
 package com.maida.demo.service;
 
-import java.util.Date;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.maida.demo.exception.ExistingEmailException;
-import com.maida.demo.exception.ExpiredTokenException;
 import com.maida.demo.exception.InvalidLoginException;
 import com.maida.demo.model.Login;
 import com.maida.demo.model.User;
 import com.maida.demo.repository.UserRepository;
-import com.maida.demo.exception.InvalidTokenException;
-import io.jsonwebtoken.Claims;
 
 @Service
 public class UserAuthenticationService {
@@ -21,6 +16,7 @@ public class UserAuthenticationService {
 	
 	private TokenService tokenService;
 	
+	//Constructor injection
 	@Autowired
 	public UserAuthenticationService (UserRepository userRepository, TokenService tokenService) {
 		this.userRepository = userRepository;
@@ -31,31 +27,11 @@ public class UserAuthenticationService {
 		User user = userRepository.findByEmail(data.getEmail()).orElseThrow(ExistingEmailException::new);
 		boolean isValidPassword = data.getPassword().equals(user.getPassword());
 		
-		if (isValidPassword && !authToken.isEmpty() && validate(authToken)) {
+		if (isValidPassword && !authToken.isEmpty() && TokenService.validate(authToken)) {
 			 return user;
 		} else {
 			throw new InvalidLoginException();
 		}
-	}
-
-	private boolean validate(String authToken) {
-		try {
-			String validTokenString = authToken.replace("Bearer","");
-			Claims claims = tokenService.decodeToken(authToken);
-			System.out.println(claims.getIssuer());
-			System.out.println(claims.getIssuedAt());
-			
-			if(claims.getExpiration().before(new Date(System.currentTimeMillis()))) {
-				throw new ExpiredTokenException();
-			}
-			return true;
-		} catch (ExpiredTokenException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new InvalidTokenException();
-		}
-		return false;
 	}
 
 }

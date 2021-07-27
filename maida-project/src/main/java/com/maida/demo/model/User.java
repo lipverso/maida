@@ -1,5 +1,6 @@
 package com.maida.demo.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -15,6 +16,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
@@ -36,10 +38,10 @@ public class User {
 	
 	private String token;
 	
-	@OneToMany
-	@JoinTable(name = "user_account", joinColumns = @JoinColumn(name = "id_user"), inverseJoinColumns = @JoinColumn(name = "id_account"))
+	//@JoinTable(name = "user_account", joinColumns = @JoinColumn(name = "id_user"), inverseJoinColumns = @JoinColumn(name = "id_account"))
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
 	@JsonIgnore
-	private List<Account> accounts;
+	private List<Account> accounts = new ArrayList<>();
 
 	public List<Account> getAccounts() {
 		return accounts;
